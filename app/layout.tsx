@@ -24,32 +24,29 @@ const jetbrains = JetBrains_Mono({
 });
 
 const description =
-  "I'm Sankalpa Acharya, 3rd-year Computer Science student driven to build software that lasts. Skilled in React, Golang, and Linux systems. I believe in creating solutions that are fast, reliable, and built to make a difference. Whenever I feel like to share my knowledge I write @blogs.";
+  "I'm Gaurav Ahuja, a software engineer who likes building for the web. This is my desktop, tiled the way I like it.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://sankalpa.info.np"),
-  title: "Sankalpa Acharya",
+  title: "Gaurav Ahuja",
   description,
   openGraph: {
-    title: "Sankalpa Acharya",
+    title: "Gaurav Ahuja",
     description,
-    url: "https://sankalpa.info.np",
-    siteName: "Sankalpa Acharya",
+    siteName: "Gaurav Ahuja",
     type: "website",
     images: [
       {
         url: "/wallpapers/gamer.png",
         width: 1200,
         height: 675,
-        alt: "Sankalpa Acharya",
+        alt: "Gaurav Ahuja",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Sankalpa Acharya",
+    title: "Gaurav Ahuja",
     description,
-    creator: "@sankalpa_02",
     images: ["/wallpapers/gamer.png"],
   },
 };

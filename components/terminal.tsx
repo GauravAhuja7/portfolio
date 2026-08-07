@@ -19,7 +19,7 @@ function TerminalContent() {
         <TerminalBodyContent
           prompt={
             <TerminalPrompt className="font-mono flex items-center">
-              <span className="text-secondary">sanku</span>
+              <span className="text-secondary">gaurav</span>
               <span className="text-muted-foreground">@</span>
               <span className="text-primary">ubuntu</span>
               <span className="text-muted-foreground">$</span>
@@ -29,7 +29,7 @@ function TerminalContent() {
 
         <div className="flex gap-2">
           <TerminalPrompt className="font-mono flex items-center">
-            <span className="text-secondary">sanku</span>
+            <span className="text-secondary">gaurav</span>
             <span className="text-muted-foreground">@</span>
             <span className="text-primary">ubuntu</span>
             <span className="text-muted-foreground">$</span>

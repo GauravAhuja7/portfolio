@@ -121,7 +121,7 @@ export default function StatusBar() {
               </div>
             </DialogTrigger>
             <DialogContent>
-              <DialogTitle>Send Anonymous Message to Sanku</DialogTitle>
+              <DialogTitle>Send Anonymous Message to Gaurav</DialogTitle>
               <ContactForm />
             </DialogContent>
           </Dialog>

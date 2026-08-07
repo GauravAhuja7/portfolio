@@ -139,7 +139,7 @@ export function PasswordScreen({ onLogin }: { onLogin?: () => void }) {
   const [error, setError] = useState(false);
 
   const handleSubmit = () => {
-    if (password === "sanku") {
+    if (password === "gaurav") {
       onLogin?.();
     } else {
       setError(true);
@@ -158,7 +158,7 @@ export function PasswordScreen({ onLogin }: { onLogin?: () => void }) {
     <div className="h-full w-full flex items-center justify-center text-white relative">
       <div className="flex flex-col items-center space-y-4">
         <CircleUser className="size-24 opacity-90" />
-        <span className="text-2xl font-semibold">sanku</span>
+        <span className="text-2xl font-semibold">gaurav</span>
         <Input
           type="password"
           autoFocus
@@ -180,7 +180,7 @@ export function PasswordScreen({ onLogin }: { onLogin?: () => void }) {
           Press Enter to unlock
         </p>
         <p className="text-sm text-primary/60 fixed bottom-0 mb-10 font-light italic">
-          password: sanku
+          password: gaurav
         </p>
       </div>
     </div>

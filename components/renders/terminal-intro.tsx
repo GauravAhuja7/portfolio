@@ -18,7 +18,7 @@ export function TerminalIntro() {
       />
 
       <div className="hidden md:block">
-        <p className="text-primary">sanku@ubuntu</p>
+        <p className="text-primary">gaurav@ubuntu</p>
         <p>--------------</p>
         {systemInfo.map((info) => (
           <div key={info.label} className="flex space-x-2">
