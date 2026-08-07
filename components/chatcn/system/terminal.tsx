@@ -144,9 +144,9 @@ function getTerminalOutput(command: string): string | React.ReactNode {
     case "whoami":
       return (
         <div>
-          Hi Im Sanku 21 year old dev I love{" "}
-          <span className="text-blue-500">Development</span> and{" "}
-          <span className="text-blue-500">Security</span>.
+          Hi, I&apos;m Gaurav — a dev who likes{" "}
+          <span className="text-blue-500">building things</span> for the{" "}
+          <span className="text-blue-500">web</span>.
         </div>
       );
     case "help":
