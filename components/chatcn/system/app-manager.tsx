@@ -42,43 +42,19 @@ const applications: Record<string, Application[]> = {
       icon: "https://upload.wikimedia.org/wikipedia/commons/e/e1/Google_Chrome_icon_%28February_2022%29.svg",
     },
   ],
-  "Social Media": [
-    {
-      name: "X (Twitter)",
-      icon: "https://upload.wikimedia.org/wikipedia/commons/5/57/X_logo_2023_%28white%29.png",
-      url: "https://x.com/sankalpa_02",
-    },
-    {
-      name: "Instagram",
-      icon: "https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg",
-      url: "https://instagram.com/sankalpa02",
-    },
-
-    {
-      name: "LinkedIn",
-      icon: "https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png",
-      url: "https://linkedin.com/in/sankalpa02",
-    },
-  ],
-
   Development: [
     {
       name: "GitHub",
       icon: "https://upload.wikimedia.org/wikipedia/commons/c/c2/GitHub_Invertocat_Logo.svg",
-      url: "https://github.com/sankalpaacharya",
+      url: "https://github.com/GauravAhuja7",
     },
     {
       name: "Neovim",
       icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Biglinux-Icons_%E2%80%93_neovim.svg/1024px-Biglinux-Icons_%E2%80%93_neovim.svg.png",
-      url: "https://github.com/sankalpaacharya",
+      url: "https://neovim.io",
     },
   ],
   Entertainment: [
-    {
-      name: "YouTube",
-      icon: "https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg",
-      url: "https://youtube.com/@sankalpa02",
-    },
     {
       name: "Spotify",
       icon: "https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg",
