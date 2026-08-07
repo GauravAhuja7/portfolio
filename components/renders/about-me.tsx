@@ -1,53 +1,22 @@
 import Link from "next/link";
 import { Kbd } from "../ui/kbd";
-import { Twitter } from "lucide-react";
+import { Github } from "lucide-react";
 
 export function AboutMe() {
   return (
     <div className="space-y-5">
       <p>
-        Hello 👋, I’m Sankalpa(<span className="text-secondary">sanku</span>).
+        Hello 👋, I’m Gaurav(<span className="text-secondary">gaurav</span>).
         I’ve been super excited about computers ever since I was a kid.
       </p>
 
-      <p>I started programming back in 2020 when I was in high school.</p>
-
       <p>
-        I used to do bug bounties and learn cybersecurity. Later, when I joined
-        college in 2022, I started focusing more on web development.
+        I’m a software engineer and I mostly build for the web. I like tools
+        that are fast, quiet, and stay out of the way.
       </p>
 
-      <div>
-        <div className="flex items-center justify-center gap-2">
-          <p>Here are some of my past works related to web security:</p>
-        </div>
-        <ul className="list-disc ml-5">
-          <li>
-            <Link
-              target="_blank"
-              href="https://blog.sankalpa.info.np/posts/testing-cookies-worth-dollar-500"
-              className="text-primary underline hover:text-primary/80 transition-all"
-            >
-              Discovered a Broken Access Control vulnerability on sso.agora.io
-              that led to full account takeover ($500)
-            </Link>
-          </li>
-          <li>
-            <Link
-              target="_blank"
-              href="https://support.leetcode.com/hc/en-us/requests/208294"
-              className="text-primary underline hover:text-primary/80 transition-all"
-            >
-              Found an issue on LeetCode where missing email verification led to
-              account takeover (reward: 100 LeetCoins)
-            </Link>
-          </li>
-        </ul>
-      </div>
-
       <p>
-        You can find my recent web development work in the <Kbd>~/projects</Kbd>{" "}
-        directory.
+        You can find my recent work in the <Kbd>~/projects</Kbd> directory.
       </p>
 
       <div className="flex items-center gap-2 text-xs">
@@ -57,10 +26,10 @@ export function AboutMe() {
         </span>
         <Link
           target="_blank"
-          href="https://x.com/sankalpa_02"
+          href="https://github.com/GauravAhuja7"
           className="flex gap-1 items-center hover:underline"
         >
-          Open to new opportunities <Twitter className="size-4" />
+          Open to new opportunities <Github className="size-4" />
         </Link>
       </div>
     </div>
