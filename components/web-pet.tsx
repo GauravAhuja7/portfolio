@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import type { RefObject } from "react";
 
 type WebPetIdleAction = {
@@ -61,30 +61,12 @@ const DEFAULT_WEB_PET = {
   followMouse: false,
 } satisfies Omit<WebPetConfig, "name" | "mediaFolder" | "defaultColor">;
 
+// One entry per animal that has sprites in public/media. To add another,
+// drop its six <color>_<action>_8fps.gif files in a folder there and add a
+// speed here.
 const WEB_PET_SPEEDS: Record<string, number> = {
-  bear: 3.9,
   cat: 4.6,
-  chicken: 4.3,
-  clippy: 3.2,
-  cockatiel: 4.0,
-  crab: 3.4,
-  deno: 4.8,
-  dog: 5.5,
-  fox: 5.2,
-  horse: 5.8,
-  mod: 4.0,
-  monkey: 4.7,
-  morph: 4.0,
   panda: 3.6,
-  rat: 4.9,
-  rocky: 2.8,
-  "rubber-duck": 3.0,
-  skeleton: 4.4,
-  snail: 1.4,
-  snake: 3.7,
-  totoro: 3.1,
-  turtle: 2.2,
-  zappy: 5.0,
 };
 
 export function getWebPetSpeed(animal: string, fallback: number): number {
@@ -123,6 +105,10 @@ function useWebPetAnimation(
   const movementTargetX = useRef<number | null>(null);
   const facingDir = useRef<1 | -1>(1);
   const lastStepTime = useRef(0);
+  // Last values actually written to the DOM, so we can skip no-op style writes.
+  const lastGif = useRef("");
+  const lastTransform = useRef("");
+  const lastLeft = useRef(Number.NaN);
 
   useEffect(() => {
     if (!config) return;
@@ -145,10 +131,32 @@ function useWebPetAnimation(
       idleAction.current = idleActions[0].name;
     }
 
+    // The three setters below all bail when the value hasn't changed. Without
+    // this the loop rewrote backgroundImage and transform on every tick with
+    // identical strings, dirtying style 8x a second for no visual change.
     function setGif(name: string) {
       if (!ref.current) return;
       const src = getGifUrl(activeConfig, name, colorOverride);
+      if (src === lastGif.current) return;
+      lastGif.current = src;
       ref.current.style.backgroundImage = `url("${src}")`;
+    }
+
+    function setTransform() {
+      if (!ref.current) return;
+      const next = `scale(${scale}) scaleX(${facingDir.current})`;
+      if (next === lastTransform.current) return;
+      lastTransform.current = next;
+      ref.current.style.transform = next;
+    }
+
+    function setLeft(px: number) {
+      if (!ref.current) return;
+      // Sub-pixel changes aren't visible; round so we skip pointless writes.
+      const rounded = Math.round(px);
+      if (rounded === lastLeft.current) return;
+      lastLeft.current = rounded;
+      ref.current.style.left = `${rounded}px`;
     }
 
     function pickIdleAction(ts: number) {
@@ -204,12 +212,31 @@ function useWebPetAnimation(
     }
 
     function animate(ts: number) {
+      // The sprites are 8fps, so there's nothing to gain from stepping more
+      // often than that — every extra frame would draw the same GIF frame.
       const stepMs = 125;
-      if (ts - lastStepTime.current < stepMs) {
+
+      // First frame: seed the clock instead of treating ts as a huge elapsed.
+      if (lastStepTime.current === 0) {
+        lastStepTime.current = ts;
         animationId.current = requestAnimationFrame(animate);
         return;
       }
-      lastStepTime.current = ts;
+
+      const elapsed = ts - lastStepTime.current;
+      if (elapsed < stepMs) {
+        animationId.current = requestAnimationFrame(animate);
+        return;
+      }
+      // Carry the remainder rather than snapping to ts, otherwise the cadence
+      // drifts a little later every tick (125ms of work starting at 141ms...).
+      lastStepTime.current = ts - (elapsed % stepMs);
+
+      // Scale movement by real elapsed time so a janky frame doesn't slow the
+      // pet down, but cap it: rAF is paused while the tab is hidden, and
+      // without a cap the pet would teleport across the screen on return.
+      const steps = Math.min(elapsed / stepMs, 3);
+
       let { x } = animalPos.current;
       const rect = ref.current?.getBoundingClientRect();
       const parentRect =
@@ -253,9 +280,7 @@ function useWebPetAnimation(
 
       if (hoverTriggered) {
         setGif(hoverAction);
-        if (ref.current) {
-          ref.current.style.transform = `scale(${scale}) scaleX(${facingDir.current})`;
-        }
+        setTransform();
       } else if (idle) {
         idleAction.current = resolveAction(activeConfig, idleAction.current);
         if (!followMouse && movementTargetX.current !== null) {
@@ -266,8 +291,9 @@ function useWebPetAnimation(
           pickIdleAction(ts);
         }
         setGif(idleAction.current);
+        setTransform();
       } else {
-        x += (diffX / distX) * speed * movementSpeedMultiplier.current;
+        x += (diffX / distX) * speed * movementSpeedMultiplier.current * steps;
         x = Math.min(Math.max(16, x), parentWidth - 16);
         animalPos.current = { x, y: 0 };
         if (
@@ -286,17 +312,10 @@ function useWebPetAnimation(
         idleCooldownUntil.current = 0;
 
         setGif(movementAction.current);
-        if (ref.current) {
-          ref.current.style.transform = `scale(${scale}) scaleX(${facingDir.current})`;
-        }
+        setTransform();
       }
 
-      if (ref.current) {
-        ref.current.style.left = `${x - spriteWidth / 2}px`;
-        if (idle) {
-          ref.current.style.transform = `scale(${scale}) scaleX(${facingDir.current})`;
-        }
-      }
+      setLeft(x - spriteWidth / 2);
 
       animationId.current = requestAnimationFrame(animate);
     }
@@ -305,18 +324,34 @@ function useWebPetAnimation(
       mousePos.current = { x: e.clientX, y: e.clientY };
     }
 
-    const reduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-    if (!reduced) {
-      document.addEventListener("mousemove", handleMouseMove);
+    function start() {
+      if (animationId.current !== null) return;
+      lastStepTime.current = 0;
       animationId.current = requestAnimationFrame(animate);
     }
 
+    function stop() {
+      if (animationId.current === null) return;
+      cancelAnimationFrame(animationId.current);
+      animationId.current = null;
+    }
+
+    // Respond to the setting being toggled, not just its value at mount.
+    function handleMotionChange() {
+      if (motionQuery.matches) stop();
+      else start();
+    }
+
+    document.addEventListener("mousemove", handleMouseMove, { passive: true });
+    motionQuery.addEventListener("change", handleMotionChange);
+    if (!motionQuery.matches) start();
+
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
-      if (animationId.current) cancelAnimationFrame(animationId.current);
+      motionQuery.removeEventListener("change", handleMotionChange);
+      stop();
     };
   }, [config, colorOverride, ref]);
 }
@@ -330,22 +365,28 @@ export function WebPet({
   followMouse = false,
 }: WebPetProps) {
   const ref = useRef<HTMLDivElement | null>(null);
-  const config: WebPetConfig = {
-    name: animal,
-    mediaFolder: animal,
-    defaultColor: color,
-    actions: DEFAULT_WEB_PET.actions,
-    hoverAction: DEFAULT_WEB_PET.hoverAction,
-    hoverDist: DEFAULT_WEB_PET.hoverDist,
-    idleActions: DEFAULT_WEB_PET.idleActions,
-    idleDist: DEFAULT_WEB_PET.idleDist,
-    idlePauseMs: DEFAULT_WEB_PET.idlePauseMs,
-    movementActions: DEFAULT_WEB_PET.movementActions,
-    speed: speed ?? getWebPetSpeed(animal, DEFAULT_WEB_PET.speed),
-    scale: scale ?? DEFAULT_WEB_PET.scale,
-    spriteSize: DEFAULT_WEB_PET.spriteSize,
-    followMouse,
-  };
+  // Memoised because it's an effect dependency: a fresh object literal every
+  // render would restart the animation loop (and reset the pet's position and
+  // idle timers) each time the parent re-rendered.
+  const config = useMemo<WebPetConfig>(
+    () => ({
+      name: animal,
+      mediaFolder: animal,
+      defaultColor: color,
+      actions: DEFAULT_WEB_PET.actions,
+      hoverAction: DEFAULT_WEB_PET.hoverAction,
+      hoverDist: DEFAULT_WEB_PET.hoverDist,
+      idleActions: DEFAULT_WEB_PET.idleActions,
+      idleDist: DEFAULT_WEB_PET.idleDist,
+      idlePauseMs: DEFAULT_WEB_PET.idlePauseMs,
+      movementActions: DEFAULT_WEB_PET.movementActions,
+      speed: speed ?? getWebPetSpeed(animal, DEFAULT_WEB_PET.speed),
+      scale: scale ?? DEFAULT_WEB_PET.scale,
+      spriteSize: DEFAULT_WEB_PET.spriteSize,
+      followMouse,
+    }),
+    [animal, color, speed, scale, followMouse],
+  );
 
   useWebPetAnimation(ref, config, color);
   const initialGif = getGifUrl(config, config.hoverAction, color);
