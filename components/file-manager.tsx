@@ -27,6 +27,21 @@ const data: FileNode[] = [
         name: "meetai",
         children: [
           { type: "file", name: "README.md", render: <MeetAI /> },
+          {
+            type: "file",
+            name: "github",
+            src: "https://github.com/GauravAhuja7/Saas-meet-ai",
+          },
+          {
+            type: "file",
+            name: ".vscode",
+            src: "https://github.dev/GauravAhuja7/Saas-meet-ai",
+          },
+          {
+            type: "file",
+            name: "live",
+            src: "https://saas-meet-ai-two.vercel.app",
+          },
         ],
       },
       {

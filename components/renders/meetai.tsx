@@ -30,13 +30,23 @@ export default function MeetAI() {
 
       <div>
         <p>
+          site:{" "}
+          <Link
+            target="_blank"
+            href="https://saas-meet-ai-two.vercel.app"
+            className="text-primary hover:underline"
+          >
+            saas-meet-ai-two.vercel.app
+          </Link>
+        </p>
+        <p>
           repo:{" "}
           <Link
             target="_blank"
-            href="https://github.com/GauravAhuja7"
+            href="https://github.com/GauravAhuja7/Saas-meet-ai"
             className="text-primary hover:underline"
           >
-            github.com/GauravAhuja7
+            github.com/GauravAhuja7/Saas-meet-ai
           </Link>
         </p>
       </div>
