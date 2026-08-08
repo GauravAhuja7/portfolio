@@ -144,9 +144,10 @@ function getTerminalOutput(command: string): string | React.ReactNode {
     case "whoami":
       return (
         <div>
-          Hi, I&apos;m Gaurav — a dev who likes{" "}
-          <span className="text-blue-500">building things</span> for the{" "}
-          <span className="text-blue-500">web</span>.
+          Hi, I&apos;m Gaurav — final-year CSE at IIT Mandi, backend engineer
+          at Joveo. I like <span className="text-blue-500">distributed
+          systems</span>, and I build with{" "}
+          <span className="text-blue-500">LLMs</span> on the side.
         </div>
       );
     case "help":
