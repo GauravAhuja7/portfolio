@@ -42,6 +42,14 @@ const applications: Record<string, Application[]> = {
       icon: "https://upload.wikimedia.org/wikipedia/commons/e/e1/Google_Chrome_icon_%28February_2022%29.svg",
     },
   ],
+  "Social Media": [
+    {
+      name: "LinkedIn",
+      icon: "https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png",
+      url: "https://linkedin.com/in/gauravahuja-iitmandi",
+    },
+  ],
+
   Development: [
     {
       name: "GitHub",
