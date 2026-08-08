@@ -3,7 +3,7 @@ import { DEFAULT_THEME, THEMES, isThemeId, type ThemeId } from '@/lib/themes';
 
 export type AppType = 'terminal' | 'browser' | 'file-manager' | 'login-manager' | 'settings';
 
-const DEFAULT_WALLPAPER = '/wallpapers/gamer.png';
+const DEFAULT_WALLPAPER = '/wallpapers/voyager.jpg';
 
 function getInitialTheme(): ThemeId {
   if (typeof window !== 'undefined') {
