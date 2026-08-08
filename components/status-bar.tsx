@@ -15,7 +15,7 @@ import { useState } from "react";
 import { Dialog, DialogTrigger, DialogContent, DialogTitle } from "./ui/dialog";
 import { SettingsContent } from "./chatcn/system/settings";
 import { BrightnessSetting } from "./settings/brightness";
-import { DiamondGame } from "./games/diamond";
+import { Games } from "./games/games";
 import { useStore } from "@/store/useStore";
 import CalendarCard from "./settings/calendar";
 import ContactForm from "./form";
@@ -134,8 +134,8 @@ export default function StatusBar() {
               </div>
             </DialogTrigger>
             <DialogContent>
-              <DialogTitle>Game</DialogTitle>
-              <DiamondGame />
+              <DialogTitle>Games</DialogTitle>
+              <Games />
             </DialogContent>
           </Dialog>
         </div>
