@@ -2,7 +2,7 @@
 // variables defined in app/globals.css (.dark) by setting them inline on
 // <html>, which wins over the stylesheet's class-based rules.
 
-export type ThemeId = "mocha" | "gruvbox" | "tokyo-night";
+export type ThemeId = "everforest" | "mocha" | "gruvbox" | "tokyo-night";
 
 type Palette = Record<string, string>;
 
@@ -125,7 +125,52 @@ const tokyoNight: Palette = {
   "--sidebar-ring": "#7aa2f7",
 };
 
+// Everforest Dark (medium contrast). Deliberately low-saturation and warm —
+// the palette is designed to be soft on the eyes rather than high-contrast.
+// Values from sainnhe/everforest palette.md.
+const everforest: Palette = {
+  "--background": "#2d353b", // bg0
+  "--foreground": "#d3c6aa", // fg
+  "--card": "#343f44", // bg1
+  "--card-foreground": "#d3c6aa",
+  "--popover": "#343f44",
+  "--popover-foreground": "#d3c6aa",
+  "--primary": "#a7c080", // green
+  "--primary-foreground": "#2d353b",
+  "--secondary": "#7fbbb3", // blue
+  "--secondary-foreground": "#2d353b",
+  "--muted": "#475258", // bg3
+  "--muted-foreground": "#9da9a0", // grey2
+  "--accent": "#3d484d", // bg2
+  "--accent-foreground": "#a7c080",
+  "--destructive": "#e67e80", // red
+  "--destructive-foreground": "#2d353b",
+  "--border": "#475258",
+  "--input": "#3d484d",
+  "--ring": "#a7c080",
+  "--chart-1": "#a7c080",
+  "--chart-2": "#83c092", // aqua
+  "--chart-3": "#7fbbb3",
+  "--chart-4": "#dbbc7f", // yellow
+  "--chart-5": "#d699b6", // purple
+  "--sidebar": "#343f44",
+  "--sidebar-foreground": "#d3c6aa",
+  "--sidebar-primary": "#a7c080",
+  "--sidebar-primary-foreground": "#2d353b",
+  "--sidebar-accent": "#3d484d",
+  "--sidebar-accent-foreground": "#a7c080",
+  "--sidebar-border": "#475258",
+  "--sidebar-ring": "#a7c080",
+};
+
 export const THEMES: Record<ThemeId, Theme> = {
+  everforest: {
+    id: "everforest",
+    label: "Everforest",
+    swatch: ["#2d353b", "#a7c080", "#7fbbb3", "#dbbc7f"],
+    wallpaper: "/wallpapers/voyager.jpg",
+    vars: everforest,
+  },
   mocha: {
     id: "mocha",
     label: "Catppuccin Mocha",
@@ -151,10 +196,15 @@ export const THEMES: Record<ThemeId, Theme> = {
 
 export const THEME_LIST: Theme[] = Object.values(THEMES);
 
-export const DEFAULT_THEME: ThemeId = "mocha";
+export const DEFAULT_THEME: ThemeId = "everforest";
 
 export function isThemeId(value: string | null): value is ThemeId {
-  return value === "mocha" || value === "gruvbox" || value === "tokyo-night";
+  return (
+    value === "everforest" ||
+    value === "mocha" ||
+    value === "gruvbox" ||
+    value === "tokyo-night"
+  );
 }
 
 // Applies a theme by setting its CSS variables inline on <html>. Inline styles
