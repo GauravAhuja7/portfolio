@@ -26,6 +26,18 @@ const data: FileNode[] = [
         type: "folder",
         name: "meetai",
         children: [
+          {
+            type: "file",
+            name: "preview.png",
+            thumbnail: "/images/meetai.png",
+            render: (
+              <img
+                src="/images/meetai.png"
+                alt="MeetAI dashboard"
+                className="w-full rounded"
+              />
+            ),
+          },
           { type: "file", name: "README.md", render: <MeetAI /> },
           {
             type: "file",
