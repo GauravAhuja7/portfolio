@@ -4,6 +4,11 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 
+// Your own key from https://web3forms.com — it decides which inbox messages
+// land in, so it must not be hardcoded to someone else's. Public by design
+// (the captcha is what stops abuse), which is why NEXT_PUBLIC_ is fine.
+const ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY ?? "";
+
 interface ContactFormProps {
   showName?: boolean;
   showEmail?: boolean;
@@ -27,7 +32,12 @@ export default function ContactForm({
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
+
+    if (!ACCESS_KEY) {
+      setResult("Contact form isn't configured yet — set NEXT_PUBLIC_WEB3FORMS_KEY.");
+      return;
+    }
+
     if (!captchaToken) {
       setResult("Please complete the captcha verification.");
       return;
@@ -43,7 +53,7 @@ export default function ContactForm({
     formData.delete("g-recaptcha-response");
     
     // Add required fields
-    formData.set("access_key", "bfbc9bbf-12d9-4608-bc47-69f2f893660f");
+    formData.set("access_key", ACCESS_KEY);
     formData.set("h-captcha-response", captchaToken);
 
     try {
@@ -118,7 +128,12 @@ export default function ContactForm({
         <div className="hcaptcha-container">
           <HCaptcha
             ref={captchaRef}
-            sitekey="50b2fe65-b00b-4b9e-ad62-3ba471098be2"
+            sitekey={
+              process.env.NEXT_PUBLIC_HCAPTCHA_SITEKEY ??
+              // hCaptcha's public test key: always passes, never blocks local
+              // dev. Set the env var with your own before deploying.
+              "10000000-ffff-ffff-ffff-000000000001"
+            }
             onVerify={onHCaptchaChange}
             size={captchaSize}
             theme="dark"
