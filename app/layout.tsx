@@ -23,8 +23,11 @@ const jetbrains = JetBrains_Mono({
   display: "swap",
 });
 
+// Kept under ~160 characters: Google truncates around there, and this string
+// is also the OpenGraph and Twitter card description. The long-form bio lives
+// in components/renders/about-me.tsx, which is what visitors actually read.
 const description =
-  "I'm Gaurav Ahuja, a software engineer who likes building for the web. This is my desktop, tiled the way I like it.";
+  "Gaurav Ahuja — backend engineer at Joveo, CSE at IIT Mandi. I build distributed services with Java, Spring Boot and Kafka on AWS, plus AI side projects.";
 
 export const metadata: Metadata = {
   title: "Gaurav Ahuja",
@@ -36,7 +39,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/wallpapers/gamer.png",
+        url: "/wallpapers/mountain.jpg",
         width: 1200,
         height: 675,
         alt: "Gaurav Ahuja",
@@ -47,7 +50,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Gaurav Ahuja",
     description,
-    images: ["/wallpapers/gamer.png"],
+    images: ["/wallpapers/mountain.jpg"],
   },
 };
 
