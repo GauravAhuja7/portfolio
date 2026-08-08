@@ -6,23 +6,28 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
 type CellType = "diamond" | "bomb";
+type Status = "playing" | "won" | "lost";
 
 interface Cell {
   type: CellType;
   revealed: boolean;
 }
 
+const SIZE = 3;
+const BOMB_COUNT = 3;
+const DIAMOND_COUNT = SIZE * SIZE - BOMB_COUNT;
+
 const createGrid = (): Cell[][] => {
   const bombPositions = new Set<number>();
-  while (bombPositions.size < 3) {
-    bombPositions.add(Math.floor(Math.random() * 9));
+  while (bombPositions.size < BOMB_COUNT) {
+    bombPositions.add(Math.floor(Math.random() * SIZE * SIZE));
   }
 
   const grid: Cell[][] = [];
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < SIZE; i++) {
     const row: Cell[] = [];
-    for (let j = 0; j < 3; j++) {
-      const position = i * 3 + j;
+    for (let j = 0; j < SIZE; j++) {
+      const position = i * SIZE + j;
       row.push({
         type: bombPositions.has(position) ? "bomb" : "diamond",
         revealed: false,
@@ -32,6 +37,9 @@ const createGrid = (): Cell[][] => {
   }
   return grid;
 };
+
+const revealAll = (grid: Cell[][]) =>
+  grid.map((row) => row.map((cell) => ({ ...cell, revealed: true })));
 
 interface GameCellProps {
   cell: Cell;
@@ -70,20 +78,32 @@ function GameCell({ cell, onClick, disabled }: GameCellProps) {
 
 export function DiamondGame() {
   const [grid, setGrid] = useState<Cell[][]>(createGrid);
-  const [gameOver, setGameOver] = useState(false);
+  const [status, setStatus] = useState<Status>("playing");
   const [score, setScore] = useState(0);
+  // Bumped on every reset so the cards remount unflipped. Without it the
+  // flip-back animation runs against the freshly generated grid, which shows
+  // the new bomb positions for the length of the animation.
+  const [round, setRound] = useState(0);
 
   const handleCellClick = (rowIndex: number, colIndex: number) => {
-    if (gameOver || grid[rowIndex][colIndex].revealed) return;
+    if (status !== "playing" || grid[rowIndex][colIndex].revealed) return;
 
     const newGrid = grid.map((row) => row.map((cell) => ({ ...cell })));
     newGrid[rowIndex][colIndex].revealed = true;
 
     if (newGrid[rowIndex][colIndex].type === "bomb") {
-      newGrid.forEach((row) => row.forEach((cell) => (cell.revealed = true)));
-      setGameOver(true);
-    } else {
-      setScore(score + 1);
+      setGrid(revealAll(newGrid));
+      setStatus("lost");
+      return;
+    }
+
+    const nextScore = score + 1;
+    setScore(nextScore);
+
+    if (nextScore === DIAMOND_COUNT) {
+      setGrid(revealAll(newGrid));
+      setStatus("won");
+      return;
     }
 
     setGrid(newGrid);
@@ -91,8 +111,9 @@ export function DiamondGame() {
 
   const resetGame = () => {
     setGrid(createGrid());
-    setGameOver(false);
+    setStatus("playing");
     setScore(0);
+    setRound((r) => r + 1);
   };
 
   return (
@@ -100,26 +121,35 @@ export function DiamondGame() {
       <div className="text-center">
         <h1 className="text-2xl font-bold">Diamond Hunt</h1>
         <p className="text-muted-foreground text-sm">
-          Find diamonds, avoid bombs!
+          Find all {DIAMOND_COUNT} diamonds, avoid the bombs!
         </p>
       </div>
 
       <div className="text-xl font-semibold">
-        Score: <span className="text-primary">{score}</span>
+        Score:{" "}
+        <span className="text-primary">
+          {score}/{DIAMOND_COUNT}
+        </span>
       </div>
 
-      {gameOver && (
+      {status === "lost" && (
         <div className="text-lg font-bold text-destructive">Game Over!</div>
+      )}
+
+      {status === "won" && (
+        <div className="text-lg font-bold text-primary">
+          You win! Found all {DIAMOND_COUNT} 🎉
+        </div>
       )}
 
       <div className="grid grid-cols-3 gap-3">
         {grid.map((row, i) =>
           row.map((cell, j) => (
             <GameCell
-              key={`${i}-${j}`}
+              key={`${round}-${i}-${j}`}
               cell={cell}
               onClick={() => handleCellClick(i, j)}
-              disabled={gameOver}
+              disabled={status !== "playing"}
             />
           ))
         )}
