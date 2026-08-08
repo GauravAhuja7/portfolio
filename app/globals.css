@@ -221,7 +221,7 @@
 .dockview-theme-minimal .dv-workspace {
   /* Follows the active theme's wallpaper. Was hardcoded, which pinned the
      workspace to one theme's background while everything else changed. */
-  background: var(--wallpaper, url("/wallpapers/voyager.jpg")) center/cover
+  background: var(--wallpaper, url("/wallpapers/fanal.jpg")) center/cover
     no-repeat fixed;
   background-attachment: fixed;
 }

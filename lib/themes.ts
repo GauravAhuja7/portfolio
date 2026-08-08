@@ -168,14 +168,14 @@ export const THEMES: Record<ThemeId, Theme> = {
     id: "everforest",
     label: "Everforest",
     swatch: ["#2d353b", "#a7c080", "#7fbbb3", "#dbbc7f"],
-    wallpaper: "/wallpapers/voyager.jpg",
+    wallpaper: "/wallpapers/fanal.jpg",
     vars: everforest,
   },
   mocha: {
     id: "mocha",
     label: "Catppuccin Mocha",
     swatch: ["#1e1e2e", "#cba6f7", "#a6e3a1", "#f38ba8"],
-    wallpaper: "/wallpapers/gamer.png",
+    wallpaper: "/wallpapers/nebula.jpg",
     vars: mocha,
   },
   gruvbox: {

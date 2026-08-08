@@ -7,12 +7,14 @@ export function SettingsContent() {
   const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set());
   const [isLoading, setIsLoading] = useState(true);
 
+  // See public/wallpapers/CREDITS.md for sources and licences.
   const wallpapers: Record<string, string> = {
+    fanal: "/wallpapers/fanal.jpg",
+    moss: "/wallpapers/moss.jpg",
+    pines: "/wallpapers/pines.jpg",
     voyager: "/wallpapers/voyager.jpg",
-    gamer: "/wallpapers/gamer.png",
-    battle: "/wallpapers/battle.png",
-    dark: "/wallpapers/dark.png",
-    arcade: "/wallpapers/arcade.png",
+    mountain: "/wallpapers/mountain.jpg",
+    nebula: "/wallpapers/nebula.jpg",
     "tokyo night": "/wallpapers/tokyo-night.png",
     gruvbox: "/wallpapers/gruvbox.png",
   };
