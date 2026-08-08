@@ -8,6 +8,8 @@ import {
   FileText,
   FileCode,
   LoaderCircle,
+  Github,
+  ExternalLink,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -125,9 +127,17 @@ function getFileMeta(extension: string) {
     "css",
     "vscode",
   ];
+  // A name with no dot passes through here whole ("github" -> "github"), so
+  // these double as special filenames for link entries in the tree.
+  const repoNames = ["github", "repo"];
+  const liveNames = ["live", "demo", "app"];
+
   if (imageExt.includes(extension)) return { type: "image", icon: ImageIcon };
   if (videoExt.includes(extension)) return { type: "video", icon: Play };
   if (textExt.includes(extension)) return { type: "text", icon: FileText };
   if (codeExt.includes(extension)) return { type: "code", icon: FileCode };
+  if (repoNames.includes(extension)) return { type: "link", icon: Github };
+  if (liveNames.includes(extension))
+    return { type: "link", icon: ExternalLink };
   return { type: "unknown", icon: FileIcon };
 }
