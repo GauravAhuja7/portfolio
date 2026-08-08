@@ -9,12 +9,12 @@ export function SettingsContent() {
 
   // See public/wallpapers/CREDITS.md for sources and licences.
   const wallpapers: Record<string, string> = {
+    sunbeams: "/wallpapers/sunbeams.jpg",
     fanal: "/wallpapers/fanal.jpg",
     moss: "/wallpapers/moss.jpg",
     pines: "/wallpapers/pines.jpg",
     voyager: "/wallpapers/voyager.jpg",
     mountain: "/wallpapers/mountain.jpg",
-    nebula: "/wallpapers/nebula.jpg",
     "tokyo night": "/wallpapers/tokyo-night.png",
     gruvbox: "/wallpapers/gruvbox.png",
   };
