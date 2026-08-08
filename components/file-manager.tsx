@@ -12,12 +12,35 @@ import Link from "next/link";
 import { Experience } from "./renders/experience";
 import Reflection from "./renders/reflection";
 import { Hobbies } from "./renders/hobbies";
+import { Skills } from "./renders/skills";
+import MeetAI from "./renders/meetai";
+import StoryYarn from "./renders/story-yarn";
+import GCApp from "./renders/gc-app";
 
 const data: FileNode[] = [
   {
     type: "folder",
     name: "projects",
     children: [
+      {
+        type: "folder",
+        name: "meetai",
+        children: [
+          { type: "file", name: "README.md", render: <MeetAI /> },
+        ],
+      },
+      {
+        type: "folder",
+        name: "story-yarn",
+        children: [
+          { type: "file", name: "README.md", render: <StoryYarn /> },
+        ],
+      },
+      {
+        type: "folder",
+        name: "gc-app",
+        children: [{ type: "file", name: "README.md", render: <GCApp /> }],
+      },
       {
         type: "file",
         name: "Reflection.md",
@@ -34,6 +57,11 @@ const data: FileNode[] = [
     type: "file",
     name: "Experience.md",
     render: <Experience />,
+  },
+  {
+    type: "file",
+    name: "Skills.md",
+    render: <Skills />,
   },
   {
     type: "file",
