@@ -14,7 +14,9 @@ interface Cell {
 }
 
 const SIZE = 3;
-const BOMB_COUNT = 3;
+// Set this to 0 to force a guaranteed win — handy for eyeballing the win
+// screen without playing 36 rounds.
+const BOMB_COUNT = 2;
 const DIAMOND_COUNT = SIZE * SIZE - BOMB_COUNT;
 
 const createGrid = (): Cell[][] => {
