@@ -213,7 +213,7 @@ export default function Page() {
           </div>
 
           <div className="flex-1 overflow-hidden p-2">
-            <WebPet animal="cockatiel" color="brown" speed={4} scale={0.55} />
+            <WebPet animal="panda" color="black" speed={3.6} scale={0.55} />
             <DockviewReact
               onReady={onReady}
               components={components}

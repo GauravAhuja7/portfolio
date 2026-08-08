@@ -66,7 +66,7 @@ export default function StatusBar() {
 
   return (
     <div className="bg-card/95 backdrop-blur-xs flex justify-between items-center p-2 border rounded shadow-xl text-xs gap-1 sm:gap-2 overflow-x-auto">
-      <WebPet animal="dog" color="akita" speed={5.5} scale={0.55} />
+      <WebPet animal="cat" color="orange" speed={4.6} scale={0.55} />
       {/* Workspace Numbers - Show only 1 on mobile, all on desktop */}
       <div
         className="flex items-center gap-1 sm:gap-2 relative"
