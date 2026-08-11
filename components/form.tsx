@@ -9,6 +9,10 @@ import { Input } from '@/components/ui/input';
 // (the captcha is what stops abuse), which is why NEXT_PUBLIC_ is fine.
 const ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY ?? "";
 
+// Published by Web3Forms for free-plan users — not a personal key.
+// https://docs.web3forms.com/getting-started/customizations/spam-protection/hcaptcha
+const HCAPTCHA_FREE_PLAN_SITEKEY = "50b2fe65-b00b-4b9e-ad62-3ba471098be2";
+
 interface ContactFormProps {
   showName?: boolean;
   showEmail?: boolean;
@@ -130,9 +134,11 @@ export default function ContactForm({
             ref={captchaRef}
             sitekey={
               process.env.NEXT_PUBLIC_HCAPTCHA_SITEKEY ??
-              // hCaptcha's public test key: always passes, never blocks local
-              // dev. Set the env var with your own before deploying.
-              "10000000-ffff-ffff-ffff-000000000001"
+              // Web3Forms' own hCaptcha sitekey. On the free plan this exact
+              // key is required — Web3Forms verifies the token against its own
+              // secret, so a different sitekey gets rejected. Only override it
+              // if you're on a paid plan with your own hCaptcha account.
+              HCAPTCHA_FREE_PLAN_SITEKEY
             }
             onVerify={onHCaptchaChange}
             size={captchaSize}
