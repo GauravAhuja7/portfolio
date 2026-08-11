@@ -8,6 +8,8 @@ import { LoginManager } from "@/components/chatcn/system/login-manager";
 import { ApplicationManager } from "@/components/chatcn/system/app-manager";
 import Browser from "@/components/chatcn/system/browser";
 import { useStore } from "@/store/useStore";
+import { Kbd } from "@/components/ui/kbd";
+import { LayoutGrid } from "lucide-react";
 import {
   DockviewReact,
   DockviewReadyEvent,
@@ -50,7 +52,11 @@ const components = {
 export default function Page() {
   const [isLogin, setIsLogin] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const { apps, closeApp, wallpaper } = useStore();
+  const { apps, closeApp, wallpaper, setAppManagerOpen } = useStore();
+  // login-manager isn't a dockview panel, so it doesn't count as a window.
+  const anyOpen = Boolean(
+    apps.terminal || apps.browser || apps["file-manager"],
+  );
   const apiRef = useRef<DockviewReadyEvent | null>(null);
   const panelRefs = useRef<Map<string, boolean>>(new Map());
 
@@ -212,7 +218,7 @@ export default function Page() {
             <StatusBar />
           </div>
 
-          <div className="flex-1 overflow-hidden p-2">
+          <div className="flex-1 overflow-hidden p-2 relative">
             <WebPet animal="panda" color="black" speed={3.6} scale={0.55} />
             <DockviewReact
               onReady={onReady}
@@ -220,6 +226,26 @@ export default function Page() {
               theme={customTheme}
               className="h-full w-full"
             />
+
+            {/* Closing every panel otherwise leaves a blank screen with no
+                hint that Ctrl+K exists. */}
+            {!anyOpen && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 pointer-events-none">
+                <p className="text-muted-foreground text-sm">
+                  No windows open
+                </p>
+                <button
+                  onClick={() => setAppManagerOpen(true)}
+                  className="pointer-events-auto flex items-center gap-2 rounded-md border border-border bg-card/95 px-4 py-2 text-sm backdrop-blur-xs hover:bg-muted transition-colors cursor-pointer"
+                >
+                  <LayoutGrid className="size-4" />
+                  Open apps
+                </button>
+                <p className="text-muted-foreground text-xs">
+                  or press <Kbd>Ctrl</Kbd>+<Kbd>k</Kbd>
+                </p>
+              </div>
+            )}
           </div>
         </>
       )}
