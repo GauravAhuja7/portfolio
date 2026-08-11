@@ -14,8 +14,8 @@ import Reflection from "./renders/reflection";
 import { Hobbies } from "./renders/hobbies";
 import { Skills } from "./renders/skills";
 import MeetAI from "./renders/meetai";
-import StoryYarn from "./renders/story-yarn";
 import GCApp from "./renders/gc-app";
+import CreditScoring from "./renders/credit-scoring";
 
 const data: FileNode[] = [
   {
@@ -58,15 +58,37 @@ const data: FileNode[] = [
       },
       {
         type: "folder",
-        name: "story-yarn",
+        name: "gc-app",
         children: [
-          { type: "file", name: "README.md", render: <StoryYarn /> },
+          { type: "file", name: "README.md", render: <GCApp /> },
+          {
+            type: "file",
+            name: "github",
+            src: "https://github.com/GauravAhuja7/General-Championship",
+          },
+          {
+            type: "file",
+            name: ".vscode",
+            src: "https://github.dev/GauravAhuja7/General-Championship",
+          },
         ],
       },
       {
         type: "folder",
-        name: "gc-app",
-        children: [{ type: "file", name: "README.md", render: <GCApp /> }],
+        name: "credit-scoring",
+        children: [
+          { type: "file", name: "README.md", render: <CreditScoring /> },
+          {
+            type: "file",
+            name: "github",
+            src: "https://github.com/GauravAhuja7/Credit-Scoring-AiHack-India-2025",
+          },
+          {
+            type: "file",
+            name: ".vscode",
+            src: "https://github.dev/GauravAhuja7/Credit-Scoring-AiHack-India-2025",
+          },
+        ],
       },
       {
         type: "file",
