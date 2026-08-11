@@ -8,9 +8,9 @@ import {
   FileText,
   FileCode,
   LoaderCircle,
-  Github,
   ExternalLink,
 } from "lucide-react";
+import { FaGithub } from "react-icons/fa6";
 import { Skeleton } from "@/components/ui/skeleton";
 
 type ItemCommonProps = {
@@ -136,7 +136,7 @@ function getFileMeta(extension: string) {
   if (videoExt.includes(extension)) return { type: "video", icon: Play };
   if (textExt.includes(extension)) return { type: "text", icon: FileText };
   if (codeExt.includes(extension)) return { type: "code", icon: FileCode };
-  if (repoNames.includes(extension)) return { type: "link", icon: Github };
+  if (repoNames.includes(extension)) return { type: "link", icon: FaGithub };
   if (liveNames.includes(extension))
     return { type: "link", icon: ExternalLink };
   return { type: "unknown", icon: FileIcon };
