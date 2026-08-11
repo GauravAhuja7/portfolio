@@ -74,21 +74,27 @@ const applications: Record<string, Application[]> = {
 type Page = "root" | "themes";
 
 export function ApplicationManager() {
-  const [open, setOpen] = useState(false);
   const [page, setPage] = useState<Page>("root");
-  const { openApp, theme, setTheme } = useStore();
+  const {
+    openApp,
+    theme,
+    setTheme,
+    appManagerOpen: open,
+    setAppManagerOpen: setOpen,
+    toggleAppManager,
+  } = useStore();
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        setOpen((open) => !open);
+        toggleAppManager();
       }
     };
 
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
-  }, []);
+  }, [toggleAppManager]);
 
   // Always start from the root page when the palette is reopened.
   useEffect(() => {

@@ -28,6 +28,9 @@ interface AppState {
 
 interface StoreState {
   apps: AppState;
+  // Lifted out of ApplicationManager so the status-bar launcher button and the
+  // empty-workspace prompt can open it too, not just the Ctrl+K shortcut.
+  appManagerOpen: boolean;
   wallpaper: string;
   brightness: number;
   theme: ThemeId;
@@ -38,9 +41,13 @@ interface StoreState {
   setWallpaper: (wallpaper: string) => void;
   setBrightness: (brightness: number) => void;
   setTheme: (theme: ThemeId) => void;
+  setAppManagerOpen: (open: boolean) => void;
+  toggleAppManager: () => void;
+  anyAppOpen: () => boolean;
 }
 
 export const useStore = create<StoreState>()((set, get) => ({
+  appManagerOpen: false,
   apps: {
     terminal: true,
     browser: false,
@@ -94,5 +101,16 @@ export const useStore = create<StoreState>()((set, get) => ({
     if (wallpaper) {
       get().setWallpaper(wallpaper);
     }
+  },
+
+  setAppManagerOpen: (appManagerOpen) => set({ appManagerOpen }),
+
+  toggleAppManager: () =>
+    set((state) => ({ appManagerOpen: !state.appManagerOpen })),
+
+  // login-manager isn't a dockview panel, so it doesn't count as a window.
+  anyAppOpen: () => {
+    const { apps } = get();
+    return ['terminal', 'browser', 'file-manager'].some((app) => apps[app]);
   },
 }));
