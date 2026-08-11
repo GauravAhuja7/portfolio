@@ -8,10 +8,10 @@ import {
   useRef,
 } from "react";
 import { createPortal } from "react-dom";
-import { Kbd } from "@/components/ui/kbd";
-import { SquareChevronRight, Command, Info } from "lucide-react";
+import { Info } from "lucide-react";
 import { TerminalIntro } from "@/components/renders/terminal-intro";
 import { useStore } from "@/store/useStore";
+import { runCommand, CLEAR, EXIT, HelpOutput } from "@/lib/commands";
 import Link from "next/link";
 
 type TerminalState = "normal" | "minimize" | "maximize";
@@ -26,6 +26,8 @@ type TerminalContextType = {
   setTerminalState: React.Dispatch<React.SetStateAction<TerminalState>>;
   terminalHistory: TerminalEntry[];
   setTerminalHistory: React.Dispatch<React.SetStateAction<TerminalEntry[]>>;
+  cwd: string[];
+  setCwd: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
 const TerminalContext = createContext<TerminalContextType>({
@@ -33,6 +35,8 @@ const TerminalContext = createContext<TerminalContextType>({
   setTerminalState: () => {},
   terminalHistory: [],
   setTerminalHistory: () => {},
+  cwd: [],
+  setCwd: () => {},
 });
 
 type TerminalProviderProps = {
@@ -46,6 +50,7 @@ export function TerminalProvider({
 }: TerminalProviderProps) {
   const [terminalState, setTerminalState] =
     useState<TerminalState>(initialState);
+  const [cwd, setCwd] = useState<string[]>([]);
   const [terminalHistory, setTerminalHistory] = useState<TerminalEntry[]>([
     {
       command: "",
@@ -53,32 +58,7 @@ export function TerminalProvider({
     },
     {
       command: "help",
-      output: (
-        <div className="space-y-2">
-          <div>
-            <p className="flex gap-1 items-center">
-              Available commands <SquareChevronRight className="size-4" />
-            </p>
-            <ul className="list-disc ml-6">
-              <li>whoami</li>
-              <li>help</li>
-              <li>clear</li>
-              <li>exit</li>
-            </ul>
-          </div>
-          <div>
-            <p className="flex items-center gap-1">
-              Shortcuts <Command className="size-4" />
-            </p>
-            <ul className="list-disc ml-6">
-              <li>
-                <Kbd>Ctrl</Kbd>+<Kbd>k</Kbd>:
-                <span className="ml-1">applications manager</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-      ),
+      output: <HelpOutput />,
     },
     {
       command: "",
@@ -106,6 +86,8 @@ export function TerminalProvider({
         setTerminalState,
         terminalHistory,
         setTerminalHistory,
+        cwd,
+        setCwd,
       }}
     >
       {children}
@@ -135,54 +117,6 @@ function getTerminalPositionClasses(state: TerminalState): string {
     case "normal":
     default:
       return "relative h-auto";
-  }
-}
-
-function getTerminalOutput(command: string): string | React.ReactNode {
-  const cmd = command.trim();
-  switch (cmd) {
-    case "whoami":
-      return (
-        <div>
-          Hi, I&apos;m Gaurav — CSE grad from IIT Mandi, backend engineer at
-          Joveo. I like <span className="text-blue-500">distributed
-          systems</span>, and I build with{" "}
-          <span className="text-blue-500">LLMs</span> on the side.
-        </div>
-      );
-    case "help":
-      return (
-        <div className="space-y-2">
-          <div>
-            <p className="flex gap-1 items-center">
-              Available commands <SquareChevronRight className="size-4" />
-            </p>
-            <ul className="list-disc ml-6">
-              <li>whoami</li>
-              <li>help</li>
-              <li>clear</li>
-              <li>exit</li>
-            </ul>
-          </div>
-          <div>
-            <p className="flex items-center gap-1">
-              Shortcuts <Command className="size-4" />
-            </p>
-            <ul className="list-disc ml-6">
-              <li>
-                <Kbd>Ctrl</Kbd>+<Kbd>k</Kbd>:
-                <span className="ml-1">applications manager</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-      );
-    case "clear":
-      return "CLEAR";
-    case "exit":
-      return "Closing...";
-    default:
-      return "Command not found!";
   }
 }
 
@@ -228,31 +162,80 @@ export function TerminalHeader({ children, className }: TerminalHeaderProps) {
 }
 
 export function TerminalInput() {
-  const { setTerminalHistory } = useContext(TerminalContext);
+  const { setTerminalHistory, cwd, setCwd } = useContext(TerminalContext);
   const [inputValue, setInputValue] = useState<string>("");
-  const { closeApp } = useStore();
+  // Commands the user has typed, for `history` and the arrow keys.
+  const [entered, setEntered] = useState<string[]>([]);
+  const [historyIndex, setHistoryIndex] = useState<number | null>(null);
+  const {
+    closeApp,
+    openApp,
+    setTheme,
+    setAppManagerOpen,
+    setContactOpen,
+    setGamesOpen,
+  } = useStore();
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      const command = inputValue.trim();
-      const output = getTerminalOutput(command);
+    // Up/down walk back through what you've typed, like a real shell.
+    if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+      if (!entered.length) return;
+      event.preventDefault();
+      const next =
+        event.key === "ArrowUp"
+          ? historyIndex === null
+            ? entered.length - 1
+            : Math.max(0, historyIndex - 1)
+          : historyIndex === null
+            ? null
+            : historyIndex + 1;
 
-      if (output === "CLEAR") {
-        setTerminalHistory([]);
+      if (next === null || next >= entered.length) {
+        setHistoryIndex(null);
         setInputValue("");
-        return;
+      } else {
+        setHistoryIndex(next);
+        setInputValue(entered[next]);
       }
-      if (command === "exit") {
-        closeApp("terminal");
-        return;
-      }
-
-      setTerminalHistory((prev) => [
-        ...prev,
-        { command, output: command ? output : "" },
-      ]);
-      setInputValue("");
+      return;
     }
+
+    if (event.key !== "Enter") return;
+
+    const command = inputValue.trim();
+    setHistoryIndex(null);
+
+    if (!command) {
+      setTerminalHistory((prev) => [...prev, { command: "", output: "" }]);
+      setInputValue("");
+      return;
+    }
+
+    const output = runCommand(command, {
+      cwd,
+      setCwd,
+      openApp,
+      setTheme,
+      setAppManagerOpen,
+      setContactOpen,
+      setGamesOpen,
+      history: entered,
+    });
+
+    setEntered((prev) => [...prev, command]);
+
+    if (output === CLEAR) {
+      setTerminalHistory([]);
+      setInputValue("");
+      return;
+    }
+    if (output === EXIT) {
+      closeApp("terminal");
+      return;
+    }
+
+    setTerminalHistory((prev) => [...prev, { command, output }]);
+    setInputValue("");
   };
 
   return (

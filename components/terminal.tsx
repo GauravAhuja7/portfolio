@@ -7,34 +7,35 @@ import {
   TerminalPrompt,
   TerminalBodyContent,
   TerminalProvider,
-  // useTerminal,
+  useTerminal,
 } from "@/components/chatcn/system/terminal";
 
-function TerminalContent() {
-  // const { setTerminalState } = useTerminal();
+// Shows the working directory so `cd` has a visible effect.
+function Prompt() {
+  const { cwd } = useTerminal();
+  return (
+    <TerminalPrompt className="font-mono flex items-center gap-1">
+      <span>
+        <span className="text-secondary">gaurav</span>
+        <span className="text-muted-foreground">@</span>
+        <span className="text-primary">ubuntu</span>
+      </span>
+      <span className="text-muted-foreground">
+        {cwd.length ? `~/${cwd.join("/")}` : "~"}
+      </span>
+      <span className="text-muted-foreground">$</span>
+    </TerminalPrompt>
+  );
+}
 
+function TerminalContent() {
   return (
     <Terminal className="w-full h-full font-mono text-sm sm:text-md shadow-xl flex flex-col">
       <TerminalBody className="bg-card/95 flex-1 flex flex-col backdrop-blur-xs">
-        <TerminalBodyContent
-          prompt={
-            <TerminalPrompt className="font-mono flex items-center">
-              <span className="text-secondary">gaurav</span>
-              <span className="text-muted-foreground">@</span>
-              <span className="text-primary">ubuntu</span>
-              <span className="text-muted-foreground">$</span>
-            </TerminalPrompt>
-          }
-        />
+        <TerminalBodyContent prompt={<Prompt />} />
 
         <div className="flex gap-2">
-          <TerminalPrompt className="font-mono flex items-center">
-            <span className="text-secondary">gaurav</span>
-            <span className="text-muted-foreground">@</span>
-            <span className="text-primary">ubuntu</span>
-            <span className="text-muted-foreground">$</span>
-          </TerminalPrompt>
-
+          <Prompt />
           <TerminalInput />
         </div>
       </TerminalBody>
