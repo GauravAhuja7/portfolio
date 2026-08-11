@@ -5,8 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const GRID_SIZE = 20;
-const MAX_CELL_SIZE = 20;
-const MIN_CELL_SIZE = 11;
+// The board is a square that shrinks to whatever width it's given, capped so
+// it doesn't balloon on desktop. Cells are 1fr, so they always tile exactly —
+// no measuring, nothing to get out of sync with the real layout.
+const MAX_BOARD_PX = 400;
 // Below this a swipe is treated as a tap, not a direction.
 const SWIPE_THRESHOLD = 24;
 const INITIAL_SNAKE = [{ x: 10, y: 10 }];
@@ -33,31 +35,12 @@ export default function SnakeGame() {
   const [isPaused, setIsPaused] = useState(false);
   const gameLoopRef = useRef<NodeJS.Timeout | null>(null);
   const directionRef = useRef(direction);
-  // The board is square and cell-based, so it has to be sized from the space
-  // it actually gets — a fixed 20px cell overflowed every phone.
-  const [cellSize, setCellSize] = useState(MAX_CELL_SIZE);
-  const sizerRef = useRef<HTMLDivElement | null>(null);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
 
   // Update direction ref when direction changes
   useEffect(() => {
     directionRef.current = direction;
   }, [direction]);
-
-  useEffect(() => {
-    const el = sizerRef.current;
-    if (!el) return;
-    const measure = () => {
-      const available = el.clientWidth;
-      if (!available) return;
-      const size = Math.floor(available / GRID_SIZE);
-      setCellSize(Math.max(MIN_CELL_SIZE, Math.min(MAX_CELL_SIZE, size)));
-    };
-    measure();
-    const observer = new ResizeObserver(measure);
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
 
   // Single entry point for keyboard and swipe. Writes the ref immediately so
   // two inputs inside one tick can't combine into a reversal onto itself.
@@ -213,15 +196,11 @@ export default function SnakeGame() {
           <span className="text-2xl font-bold">Score: {score}</span>
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col items-center gap-4">
-        {/* Game Board — sizer measures the space, board sizes itself to fit */}
-        <div ref={sizerRef} className="w-full flex justify-center">
+      <CardContent className="flex flex-col items-center gap-4 px-3 sm:px-6">
+        {/* Game Board */}
         <div
-          className="border-2 border-primary rounded-lg overflow-hidden shadow-lg touch-none select-none"
-          style={{
-            width: GRID_SIZE * cellSize,
-            height: GRID_SIZE * cellSize,
-          }}
+          className="w-full aspect-square border-2 border-primary rounded-lg overflow-hidden shadow-lg touch-none select-none"
+          style={{ maxWidth: MAX_BOARD_PX }}
           onTouchStart={(e) => {
             const t = e.touches[0];
             touchStart.current = { x: t.clientX, y: t.clientY };
@@ -243,10 +222,10 @@ export default function SnakeGame() {
           }}
         >
           <div
-            className="grid bg-secondary/20"
+            className="grid bg-secondary/20 h-full w-full"
             style={{
-              gridTemplateColumns: `repeat(${GRID_SIZE}, ${cellSize}px)`,
-              gridTemplateRows: `repeat(${GRID_SIZE}, ${cellSize}px)`,
+              gridTemplateColumns: `repeat(${GRID_SIZE}, 1fr)`,
+              gridTemplateRows: `repeat(${GRID_SIZE}, 1fr)`,
             }}
           >
             {Array.from({ length: GRID_SIZE * GRID_SIZE }).map((_, index) => {
@@ -259,7 +238,7 @@ export default function SnakeGame() {
               return (
                 <div
                   key={index}
-                  className={`border border-secondary/10 transition-colors ${
+                  className={`w-full h-full border border-secondary/10 transition-colors ${
                     isHead
                       ? "bg-green-600"
                       : isSnake
@@ -268,15 +247,10 @@ export default function SnakeGame() {
                       ? "bg-red-500 rounded-full"
                       : ""
                   }`}
-                  style={{
-                    width: cellSize,
-                    height: cellSize,
-                  }}
                 />
               );
             })}
           </div>
-        </div>
         </div>
 
         {/* Game Controls */}
@@ -305,11 +279,8 @@ export default function SnakeGame() {
 
           {/* Instructions */}
           <div className="text-sm text-muted-foreground text-center space-y-1">
-            <p className="hidden sm:block">
-              Use arrow keys to control the snake
-            </p>
-            <p className="hidden sm:block">Press Space to pause/resume</p>
-            <p className="sm:hidden">Swipe on the board to steer</p>
+            <p>Arrow keys or swipe on the board to steer</p>
+            <p>Space to pause/resume</p>
           </div>
         </div>
       </CardContent>

@@ -30,9 +30,9 @@ export function Games() {
         ))}
       </div>
 
-      {/* Snake's board is a fixed 400px, so let it scroll rather than
-          overflow the dialog on narrow screens. */}
-      <div className="max-h-[70vh] overflow-y-auto overflow-x-auto">
+      {/* Vertical scroll only — the board sizes itself to the width it gets,
+          so a horizontal scroller would just let it overflow instead. */}
+      <div className="max-h-[70vh] overflow-y-auto">
         {active === "diamond" ? <DiamondGame /> : <SnakeGame />}
       </div>
     </div>
