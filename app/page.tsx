@@ -230,20 +230,26 @@ export default function Page() {
             {/* Closing every panel otherwise leaves a blank screen with no
                 hint that Ctrl+K exists. */}
             {!anyOpen && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 pointer-events-none">
-                <p className="text-muted-foreground text-sm">
-                  No windows open
-                </p>
-                <button
-                  onClick={() => setAppManagerOpen(true)}
-                  className="pointer-events-auto flex items-center gap-2 rounded-md border border-border bg-card/95 px-4 py-2 text-sm backdrop-blur-xs hover:bg-muted transition-colors cursor-pointer"
-                >
-                  <LayoutGrid className="size-4" />
-                  Open apps
-                </button>
-                <p className="text-muted-foreground text-xs">
-                  or press <Kbd>Ctrl</Kbd>+<Kbd>k</Kbd>
-                </p>
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                {/* Everything sits on one opaque card — muted text directly on
+                    the wallpaper was unreadable against a bright photo. */}
+                <div className="pointer-events-auto flex flex-col items-center gap-4 rounded-lg border border-border bg-card px-8 py-6 shadow-xl">
+                  <p className="text-card-foreground text-sm font-medium">
+                    No windows open
+                  </p>
+                  <button
+                    onClick={() => setAppManagerOpen(true)}
+                    className="flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors cursor-pointer"
+                  >
+                    <LayoutGrid className="size-4" />
+                    Open apps
+                  </button>
+                  {/* card-foreground/80 rather than muted-foreground: at this
+                      size muted only reaches 4.4:1 on the card, just under AA. */}
+                  <p className="text-card-foreground/80 text-xs">
+                    or press <Kbd>Ctrl</Kbd>+<Kbd>k</Kbd>
+                  </p>
+                </div>
               </div>
             )}
           </div>
