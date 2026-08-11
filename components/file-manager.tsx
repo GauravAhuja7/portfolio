@@ -1,5 +1,6 @@
 "use client";
-import { useFileManager, FileNode } from "@/hooks/useFileManager";
+import { useFileManager } from "@/hooks/useFileManager";
+import { FILE_TREE } from "@/lib/file-tree";
 import { FolderItem, FileItem } from "@/components/chatcn/system/file-manager";
 import {
   Dialog,
@@ -7,121 +8,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { AboutMe } from "./renders/about-me";
 import Link from "next/link";
-import { Experience } from "./renders/experience";
-import Reflection from "./renders/reflection";
-import { Hobbies } from "./renders/hobbies";
-import { Skills } from "./renders/skills";
-import MeetAI from "./renders/meetai";
-import GCApp from "./renders/gc-app";
-import CreditScoring from "./renders/credit-scoring";
-
-const data: FileNode[] = [
-  {
-    type: "folder",
-    name: "projects",
-    children: [
-      {
-        type: "folder",
-        name: "meetai",
-        children: [
-          {
-            type: "file",
-            name: "preview.png",
-            thumbnail: "/images/meetai.png",
-            render: (
-              <img
-                src="/images/meetai.png"
-                alt="MeetAI dashboard"
-                className="w-full rounded"
-              />
-            ),
-          },
-          { type: "file", name: "README.md", render: <MeetAI /> },
-          {
-            type: "file",
-            name: "github",
-            src: "https://github.com/GauravAhuja7/Saas-meet-ai",
-          },
-          {
-            type: "file",
-            name: ".vscode",
-            src: "https://github.dev/GauravAhuja7/Saas-meet-ai",
-          },
-          {
-            type: "file",
-            name: "live",
-            src: "https://saas-meet-ai-two.vercel.app",
-          },
-        ],
-      },
-      {
-        type: "folder",
-        name: "gc-app",
-        children: [
-          { type: "file", name: "README.md", render: <GCApp /> },
-          {
-            type: "file",
-            name: "github",
-            src: "https://github.com/GauravAhuja7/General-Championship",
-          },
-          {
-            type: "file",
-            name: ".vscode",
-            src: "https://github.dev/GauravAhuja7/General-Championship",
-          },
-        ],
-      },
-      {
-        type: "folder",
-        name: "credit-scoring",
-        children: [
-          { type: "file", name: "README.md", render: <CreditScoring /> },
-          {
-            type: "file",
-            name: "github",
-            src: "https://github.com/GauravAhuja7/Credit-Scoring-AiHack-India-2025",
-          },
-          {
-            type: "file",
-            name: ".vscode",
-            src: "https://github.dev/GauravAhuja7/Credit-Scoring-AiHack-India-2025",
-          },
-        ],
-      },
-      {
-        type: "file",
-        name: "Reflection.md",
-        render: <Reflection />,
-      },
-    ],
-  },
-  {
-    type: "file",
-    name: "AboutMe.md",
-    render: <AboutMe />,
-  },
-  {
-    type: "file",
-    name: "Experience.md",
-    render: <Experience />,
-  },
-  {
-    type: "file",
-    name: "Skills.md",
-    render: <Skills />,
-  },
-  {
-    type: "file",
-    name: "Hobbies.md",
-    render: <Hobbies />,
-  },
-];
 
 export default function FileManager() {
   const { path, currentFolder, openFolder, goBack, goTo } =
-    useFileManager(data);
+    useFileManager(FILE_TREE);
 
   return (
     <div className="h-full w-full backdrop-blur-xs flex flex-col p-3 sm:p-4 md:p-6 space-y-3 sm:space-y-4 md:space-y-6 bg-card/95 border rounded overflow-hidden">
