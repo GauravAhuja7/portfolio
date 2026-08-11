@@ -144,8 +144,8 @@ function getTerminalOutput(command: string): string | React.ReactNode {
     case "whoami":
       return (
         <div>
-          Hi, I&apos;m Gaurav — final-year CSE at IIT Mandi, backend engineer
-          at Joveo. I like <span className="text-blue-500">distributed
+          Hi, I&apos;m Gaurav — CSE grad from IIT Mandi, backend engineer at
+          Joveo. I like <span className="text-blue-500">distributed
           systems</span>, and I build with{" "}
           <span className="text-blue-500">LLMs</span> on the side.
         </div>

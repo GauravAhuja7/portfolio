@@ -1,45 +1,51 @@
 import Link from "next/link";
-import { Kbd } from "../ui/kbd";
-import { Github, Linkedin } from "lucide-react";
+import { FaGithub, FaLinkedin } from "react-icons/fa6";
 
 export function AboutMe() {
   return (
     <div className="space-y-5">
+      <p>Hey 👋, I’m Gaurav.</p>
+
       <p>
-        Hello 👋, I’m Gaurav(<span className="text-secondary">gaurav</span>).
-        I’ve been super excited about computers ever since I was a kid.
+        I like building stuff on the internet and, somewhere along the way, got
+        way too interested in what happens behind the scenes.
       </p>
 
       <p>
-        I’m in my final year of Computer Science at{" "}
-        <span className="text-primary">IIT Mandi</span> (2022–2026, CGPA 8.14),
-        and right
-        now I’m a backend engineer at{" "}
-        <span className="text-primary">Joveo</span>, building third-party
-        integrations in Java and Spring Boot — REST contracts, OAuth token
-        refresh, idempotent webhooks, and Kafka pipelines on AWS MSK carrying a
-        few million events a month.
+        I recently graduated from <span className="text-primary">IIT Mandi</span>{" "}
+        and work as a backend engineer at{" "}
+        <span className="text-primary">Joveo</span>, where I mostly deal with
+        Java, Spring Boot, Kafka, AWS, and a bunch of third-party systems that
+        don’t always behave the way you want them to 😭. A lot of my work is
+        around APIs, OAuth, webhooks, async processing, retries, idempotency,
+        and generally making sure things don’t fall apart when something
+        unexpected happens.
       </p>
 
       <p>
-        Before that I was at <span className="text-primary">Equal</span>, where
-        I refactored a legacy stateful backend into a stateless AWS
-        architecture and spent a good chunk of time chasing down latency.
+        Before Joveo, I worked at <span className="text-primary">Equal</span>,
+        where I got to work on a pretty large codebase and help move parts of a
+        legacy backend towards a more scalable AWS setup.
       </p>
 
       <p>
-        Most of what I enjoy is the unglamorous part — retries, idempotency,
-        why the P95 is bad, what happens when a third party changes their
-        schema without telling you. I also build things with LLMs on the side;
-        one of them ended up{" "}
-        <span className="text-primary">published at ICON 2024</span>.
+        Outside work, I’m usually building some random project, trying out a new
+        technology, or going down a rabbit hole because I wanted to understand
+        how something works. I’m especially into backend systems, distributed
+        stuff, and lately, AI/LLM-based projects.
       </p>
 
       <p>
-        You can find my recent work in the <Kbd>~/projects</Kbd> directory.
+        I’m not really into building things just to say I built them. I like
+        making things that are actually useful, figuring out why they break, and
+        then trying to make them a little better.
       </p>
 
-      <div className="flex items-center gap-4 text-xs">
+      <p>
+        Anyway, this is my little corner of the internet — have a look around :)
+      </p>
+
+      <div className="flex items-center gap-4 text-xs pt-1">
         <div className="flex items-center gap-2">
           <span className="relative flex size-3">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
@@ -53,7 +59,7 @@ export function AboutMe() {
           href="https://github.com/GauravAhuja7"
           className="flex gap-1 items-center hover:underline"
         >
-          <Github className="size-4" /> GitHub
+          <FaGithub className="size-4" /> GitHub
         </Link>
 
         <Link
@@ -61,7 +67,7 @@ export function AboutMe() {
           href="https://linkedin.com/in/gauravahuja-iitmandi"
           className="flex gap-1 items-center hover:underline"
         >
-          <Linkedin className="size-4" /> LinkedIn
+          <FaLinkedin className="size-4" /> LinkedIn
         </Link>
       </div>
     </div>
