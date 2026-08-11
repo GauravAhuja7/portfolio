@@ -34,6 +34,10 @@ export default function StatusBar() {
   const brightness = useStore((state) => state.brightness);
   const setBrightness = useStore((state) => state.setBrightness);
   const setAppManagerOpen = useStore((state) => state.setAppManagerOpen);
+  const contactOpen = useStore((state) => state.contactOpen);
+  const setContactOpen = useStore((state) => state.setContactOpen);
+  const gamesOpen = useStore((state) => state.gamesOpen);
+  const setGamesOpen = useStore((state) => state.setGamesOpen);
 
   const now = new Date();
   const time = now.toLocaleTimeString([], {
@@ -128,7 +132,7 @@ export default function StatusBar() {
           </Dialog>
         </div>
         <div className="p-0.5 sm:p-1 hover:bg-muted rounded flex items-center">
-          <Dialog>
+          <Dialog open={contactOpen} onOpenChange={setContactOpen}>
             <DialogTrigger>
               <div className="p-0.5 sm:p-1 hover:bg-muted rounded">
                 <MessageSquare className="size-3.5 sm:size-4" />
@@ -141,7 +145,7 @@ export default function StatusBar() {
           </Dialog>
         </div>
         <div className="p-0.5 sm:p-1 hover:bg-muted rounded flex items-center">
-          <Dialog>
+          <Dialog open={gamesOpen} onOpenChange={setGamesOpen}>
             <DialogTrigger>
               <div className="p-0.5 sm:p-1 hover:bg-muted rounded">
                 <Gamepad2 className="size-3.5 sm:size-4" />

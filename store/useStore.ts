@@ -31,6 +31,9 @@ interface StoreState {
   // Lifted out of ApplicationManager so the status-bar launcher button and the
   // empty-workspace prompt can open it too, not just the Ctrl+K shortcut.
   appManagerOpen: boolean;
+  // Dialogs owned by the status bar, lifted so terminal commands can open them.
+  contactOpen: boolean;
+  gamesOpen: boolean;
   wallpaper: string;
   brightness: number;
   theme: ThemeId;
@@ -42,12 +45,16 @@ interface StoreState {
   setBrightness: (brightness: number) => void;
   setTheme: (theme: ThemeId) => void;
   setAppManagerOpen: (open: boolean) => void;
+  setContactOpen: (open: boolean) => void;
+  setGamesOpen: (open: boolean) => void;
   toggleAppManager: () => void;
   anyAppOpen: () => boolean;
 }
 
 export const useStore = create<StoreState>()((set, get) => ({
   appManagerOpen: false,
+  contactOpen: false,
+  gamesOpen: false,
   apps: {
     terminal: true,
     browser: false,
@@ -104,6 +111,10 @@ export const useStore = create<StoreState>()((set, get) => ({
   },
 
   setAppManagerOpen: (appManagerOpen) => set({ appManagerOpen }),
+
+  setContactOpen: (contactOpen) => set({ contactOpen }),
+
+  setGamesOpen: (gamesOpen) => set({ gamesOpen }),
 
   toggleAppManager: () =>
     set((state) => ({ appManagerOpen: !state.appManagerOpen })),
