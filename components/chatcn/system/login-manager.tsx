@@ -1,11 +1,14 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { CircleUser } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
+
+// Below this a swipe counts as a tap.
+const SWIPE_THRESHOLD = 40;
 
 type LoginManagerProps = {
   wallpaper?: string;
@@ -48,6 +51,28 @@ export function LoginManager({
     }
   };
 
+  // Swipe up to unlock, the way a phone lock screen does — the first screen
+  // already animates upward, so the gesture matches the motion.
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const t = e.touches[0];
+    touchStart.current = { x: t.clientX, y: t.clientY };
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const start = touchStart.current;
+    touchStart.current = null;
+    if (!start || active) return;
+    const t = e.changedTouches[0];
+    const dy = t.clientY - start.y;
+    const dx = t.clientX - start.x;
+    // Upward, and more vertical than horizontal.
+    if (dy < -SWIPE_THRESHOLD && Math.abs(dy) > Math.abs(dx)) {
+      setActive(true);
+    }
+  };
+
   if (!mounted) return null;
 
   const content = (
@@ -58,6 +83,8 @@ export function LoginManager({
       )}
       style={{ backgroundImage: `url(${wallpaper})` }}
       onClick={handleScreenTap}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
       <div
         className={cn(
@@ -128,7 +155,7 @@ export function FirstScreen() {
         <span className="hidden sm:inline">
           Press &quot;Space&quot; or &quot;Enter&quot; to login
         </span>
-        <span className="sm:hidden">Tap to login</span>
+        <span className="sm:hidden">Swipe up or tap to login</span>
       </p>
     </div>
   );
