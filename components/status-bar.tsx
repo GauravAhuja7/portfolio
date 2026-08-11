@@ -9,6 +9,7 @@ import {
   Settings as SettingsIcon,
   Gamepad2,
   MessageSquare,
+  LayoutGrid,
   type LucideIcon,
 } from "lucide-react";
 import { useState } from "react";
@@ -32,6 +33,7 @@ export default function StatusBar() {
   const [active, setActive] = useState(1);
   const brightness = useStore((state) => state.brightness);
   const setBrightness = useStore((state) => state.setBrightness);
+  const setAppManagerOpen = useStore((state) => state.setAppManagerOpen);
 
   const now = new Date();
   const time = now.toLocaleTimeString([], {
@@ -100,6 +102,18 @@ export default function StatusBar() {
 
       {/* Settings, Message, and Game Icons */}
       <div className="flex items-center space-x-0.5 sm:space-x-1">
+        <div className="p-0.5 sm:p-1 hover:bg-muted rounded flex items-center">
+          {/* The only pointer-driven way to reopen apps once every panel is
+              closed — Ctrl+K alone leaves touch users stuck. */}
+          <button
+            onClick={() => setAppManagerOpen(true)}
+            aria-label="Open applications"
+            title="Applications (Ctrl+K)"
+            className="p-0.5 sm:p-1 hover:bg-muted rounded cursor-pointer"
+          >
+            <LayoutGrid className="size-3.5 sm:size-4" />
+          </button>
+        </div>
         <div className="p-0.5 sm:p-1 hover:bg-muted rounded flex items-center">
           <Dialog>
             <DialogTrigger>
