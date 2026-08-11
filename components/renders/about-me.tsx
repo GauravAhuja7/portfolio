@@ -29,16 +29,11 @@ export function AboutMe() {
       </p>
 
       <p>
-        Outside work, I’m usually building some random project, trying out a new
-        technology, or going down a rabbit hole because I wanted to understand
-        how something works. I’m especially into backend systems, distributed
-        stuff, and lately, AI/LLM-based projects.
-      </p>
-
-      <p>
-        I’m not really into building things just to say I built them. I like
-        making things that are actually useful, figuring out why they break, and
-        then trying to make them a little better.
+        Outside work I’m usually building some random project or going down a
+        rabbit hole because I wanted to know how something works — mostly
+        backend, distributed stuff, and lately AI/LLM things. Not to say I built
+        them though; I just like making things that are actually useful,
+        figuring out why they break, and making them a little better.
       </p>
 
       <p>
