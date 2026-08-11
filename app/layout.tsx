@@ -40,8 +40,9 @@ export const metadata: Metadata = {
     images: [
       {
         url: "/wallpapers/mountain.jpg",
-        width: 1200,
-        height: 675,
+        // Must match the real file — scrapers use these for layout.
+        width: 1920,
+        height: 1280,
         alt: "Gaurav Ahuja",
       },
     ],

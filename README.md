@@ -3,12 +3,12 @@
 My personal site, built as a Linux i3-style tiling desktop — a terminal, a file
 manager, a browser and a couple of games, tiled in resizable panes.
 
-Live at [saas-meet-ai-two.vercel.app](https://github.com/GauravAhuja7) <!-- TODO: replace with the deployed portfolio URL -->
+Live at [gauravahuja.vercel.app](https://gauravahuja.vercel.app)
 
 ## Features
 
 - 🪟 Tiling window manager layout (dockview) with draggable, resizable panes
-- 💻 Terminal with a small command set (`whoami`, `help`, `clear`, `exit`)
+- 💻 Terminal with a real command set — `ls`, `cd`, `cat`, `theme`, `contact`, and a few hidden ones
 - 📁 File manager — the site's content lives here as folders and READMEs
 - 🎨 Four themes (Everforest, Catppuccin Mocha, Gruvbox, Tokyo Night) with wallpapers
 - 🎮 Built-in games (Snake, Diamond Hunt)
