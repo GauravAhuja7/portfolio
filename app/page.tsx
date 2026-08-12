@@ -50,9 +50,9 @@ const components = {
 };
 
 export default function Page() {
-  const [isLogin, setIsLogin] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const { apps, closeApp, wallpaper, setAppManagerOpen } = useStore();
+  const { apps, closeApp, wallpaper, setAppManagerOpen, locked, requirePassword, unlock } =
+    useStore();
   // login-manager isn't a dockview panel, so it doesn't count as a window.
   const anyOpen = Boolean(
     apps.terminal || apps.browser || apps["file-manager"],
@@ -160,7 +160,7 @@ export default function Page() {
   };
 
   useEffect(() => {
-    if (!isLogin || !apiRef.current) return;
+    if (locked || !apiRef.current) return;
 
     const appTypes: Array<"terminal" | "browser" | "file-manager"> = [
       "terminal",
@@ -201,16 +201,17 @@ export default function Page() {
         }
       }
     });
-  }, [isLogin, apps, isMobile]);
+  }, [locked, apps, isMobile]);
 
   return (
     <div className="h-screen flex flex-col overflow-hidden">
       <ApplicationManager />
-      {!isLogin ? (
+      {locked ? (
         <LoginManager
           portal={true}
           wallpaper={wallpaper}
-          onLogin={() => setIsLogin(true)}
+          requirePassword={requirePassword}
+          onLogin={unlock}
         />
       ) : (
         <>

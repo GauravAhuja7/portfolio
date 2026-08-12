@@ -34,6 +34,10 @@ interface StoreState {
   // Dialogs owned by the status bar, lifted so terminal commands can open them.
   contactOpen: boolean;
   gamesOpen: boolean;
+  // The lock screen. Normally one gesture and you're in; `lock` in the
+  // terminal puts it back up and asks for the password.
+  locked: boolean;
+  requirePassword: boolean;
   wallpaper: string;
   brightness: number;
   theme: ThemeId;
@@ -47,6 +51,8 @@ interface StoreState {
   setAppManagerOpen: (open: boolean) => void;
   setContactOpen: (open: boolean) => void;
   setGamesOpen: (open: boolean) => void;
+  lock: () => void;
+  unlock: () => void;
   toggleAppManager: () => void;
   anyAppOpen: () => boolean;
 }
@@ -55,6 +61,8 @@ export const useStore = create<StoreState>()((set, get) => ({
   appManagerOpen: false,
   contactOpen: false,
   gamesOpen: false,
+  locked: true,
+  requirePassword: false,
   apps: {
     terminal: true,
     browser: false,
@@ -115,6 +123,10 @@ export const useStore = create<StoreState>()((set, get) => ({
   setContactOpen: (contactOpen) => set({ contactOpen }),
 
   setGamesOpen: (gamesOpen) => set({ gamesOpen }),
+
+  lock: () => set({ locked: true, requirePassword: true }),
+
+  unlock: () => set({ locked: false, requirePassword: false }),
 
   toggleAppManager: () =>
     set((state) => ({ appManagerOpen: !state.appManagerOpen })),
