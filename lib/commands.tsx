@@ -18,6 +18,7 @@ export type CommandContext = {
   setAppManagerOpen: (open: boolean) => void;
   setContactOpen: (open: boolean) => void;
   setGamesOpen: (open: boolean) => void;
+  lock: () => void;
   history: string[];
 };
 
@@ -276,6 +277,14 @@ export const COMMANDS: Record<string, Command> = {
         with <span className="text-blue-500">LLMs</span> on the side.
       </div>
     ),
+  },
+
+  lock: {
+    description: "lock the screen (password: gaurav)",
+    run: (_args, ctx) => {
+      ctx.lock();
+      return "";
+    },
   },
 
   clear: { description: "clear the screen", run: () => CLEAR },

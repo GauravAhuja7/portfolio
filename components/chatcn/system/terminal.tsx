@@ -174,6 +174,7 @@ export function TerminalInput() {
     setAppManagerOpen,
     setContactOpen,
     setGamesOpen,
+    lock,
   } = useStore();
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -219,6 +220,7 @@ export function TerminalInput() {
       setAppManagerOpen,
       setContactOpen,
       setGamesOpen,
+      lock,
       history: entered,
     });
 
