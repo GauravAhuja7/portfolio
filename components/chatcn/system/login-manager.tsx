@@ -157,23 +157,26 @@ export function FirstScreen() {
 
   return (
     <div className="h-full w-full flex flex-col items-center text-white relative px-6">
-      <div className="flex flex-col items-center space-y-3 mt-20">
+      <div className="flex flex-col items-center space-y-3 mt-16 sm:mt-20">
         <div className="text-6xl font-bold">{formatTime(currentTime)}</div>
         <div className="text-lg">{formatDate(currentTime)}</div>
       </div>
 
-      {/* Without this the first thing a visitor sees is an anonymous clock —
-          no clue whose site it is or whether they're in the right place. */}
-      <div className="flex flex-col items-center gap-4 mt-14 text-center">
+      {/* Clock at the top, identity down at the bottom — the way macOS Sonoma
+          and GNOME lay a lock screen out. Also stops the site opening on an
+          anonymous clock with no clue whose it is. */}
+      <div className="flex-1" />
+
+      <div className="flex flex-col items-center gap-3 mb-24 sm:mb-28 text-center">
         <Image
           src="/images/gaurav.jpg"
           alt="Gaurav Ahuja"
           width={128}
           height={128}
           priority
-          className="size-24 sm:size-32 rounded-full object-cover ring-2 ring-white/40 shadow-xl"
+          className="size-20 sm:size-24 rounded-full object-cover ring-2 ring-white/40 shadow-xl"
         />
-        <p className="text-2xl sm:text-3xl font-semibold">Gaurav Ahuja</p>
+        <p className="text-xl sm:text-2xl font-semibold">Gaurav Ahuja</p>
       </div>
 
       <p className="text-lg italic text-white/70 absolute bottom-10 text-center">
@@ -207,14 +210,14 @@ export function PasswordScreen({ onLogin }: { onLogin?: () => void }) {
   };
 
   return (
-    <div className="h-full w-full flex items-center justify-center text-white relative">
+    <div className="h-full w-full flex items-end justify-center text-white relative pb-24 sm:pb-28">
       <div className="flex flex-col items-center space-y-4">
         <Image
           src="/images/gaurav.jpg"
           alt="Gaurav Ahuja"
           width={96}
           height={96}
-          className="size-24 rounded-full object-cover ring-2 ring-white/40"
+          className="size-20 sm:size-24 rounded-full object-cover ring-2 ring-white/40"
         />
         <span className="text-2xl font-semibold">gaurav</span>
         <Input
