@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { CircleUser } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -13,12 +13,17 @@ const SWIPE_THRESHOLD = 40;
 type LoginManagerProps = {
   wallpaper?: string;
   portal?: boolean;
+  // Off by default: the password is printed on screen, so it secures nothing
+  // and only costs a first-time visitor a keyboard. The `lock` command turns
+  // it back on for people who want to see it.
+  requirePassword?: boolean;
   onLogin?: () => void;
 };
 
 export function LoginManager({
   wallpaper = "/images/image.png",
   portal = false,
+  requirePassword = false,
   onLogin,
 }: LoginManagerProps) {
   const [active, setActive] = useState(false);
@@ -34,22 +39,27 @@ export function LoginManager({
     };
   }, []);
 
+  const enter = useCallback(() => {
+    if (active) return;
+    if (requirePassword) {
+      setActive(true);
+    } else {
+      onLogin?.();
+    }
+  }, [active, requirePassword, onLogin]);
+
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       if (!active && (e.key === " " || e.key === "Enter")) {
         e.preventDefault();
-        setActive(true);
+        enter();
       }
     };
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [active]);
+  }, [active, enter]);
 
-  const handleScreenTap = () => {
-    if (!active) {
-      setActive(true);
-    }
-  };
+  const handleScreenTap = () => enter();
 
   // Swipe up to unlock, the way a phone lock screen does — the first screen
   // already animates upward, so the gesture matches the motion.
@@ -69,7 +79,7 @@ export function LoginManager({
     const dx = t.clientX - start.x;
     // Upward, and more vertical than horizontal.
     if (dy < -SWIPE_THRESHOLD && Math.abs(dy) > Math.abs(dx)) {
-      setActive(true);
+      enter();
     }
   };
 
@@ -146,16 +156,26 @@ export function FirstScreen() {
   };
 
   return (
-    <div className="h-full w-full flex flex-col items-center text-white relative">
+    <div className="h-full w-full flex flex-col items-center text-white relative px-6">
       <div className="flex flex-col items-center space-y-3 mt-20">
         <div className="text-6xl font-bold">{formatTime(currentTime)}</div>
         <div className="text-lg">{formatDate(currentTime)}</div>
       </div>
-      <p className="text-lg italic text-muted-foreground absolute bottom-10">
+
+      {/* Without this the first thing a visitor sees is an anonymous clock —
+          no clue whose site it is or whether they're in the right place. */}
+      <div className="flex flex-col items-center gap-1 mt-12 text-center">
+        <p className="text-3xl sm:text-4xl font-semibold">Gaurav Ahuja</p>
+        <p className="text-sm sm:text-base text-white/80">
+          backend engineer · IIT Mandi CSE
+        </p>
+      </div>
+
+      <p className="text-lg italic text-white/70 absolute bottom-10 text-center">
         <span className="hidden sm:inline">
-          Press &quot;Space&quot; or &quot;Enter&quot; to login
+          Press &quot;Space&quot; or &quot;Enter&quot; to continue
         </span>
-        <span className="sm:hidden">Swipe up or tap to login</span>
+        <span className="sm:hidden">Swipe up or tap to continue</span>
       </p>
     </div>
   );
