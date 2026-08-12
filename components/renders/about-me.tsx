@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { FaGithub, FaLinkedin } from "react-icons/fa6";
+import { Mail, Phone } from "lucide-react";
+import { CONTACT, mailto, tel } from "@/lib/contact";
 
 export function AboutMe() {
   return (
@@ -40,8 +42,8 @@ export function AboutMe() {
         Anyway, this is my little corner of the internet — have a look around :)
       </p>
 
-      <div className="flex items-center gap-4 text-xs pt-1">
-        <div className="flex items-center gap-2">
+      <div className="space-y-3 pt-1">
+        <div className="flex items-center gap-2 text-xs">
           <span className="relative flex size-3">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
             <span className="relative inline-flex size-3 rounded-full bg-primary/70"></span>
@@ -49,21 +51,39 @@ export function AboutMe() {
           <span>Open to new opportunities</span>
         </div>
 
-        <Link
-          target="_blank"
-          href="https://github.com/GauravAhuja7"
-          className="flex gap-1 items-center hover:underline"
-        >
-          <FaGithub className="size-4" /> GitHub
-        </Link>
+        {/* Recruiters shouldn't have to hunt — mail and tel are one tap on a
+            phone, and both are selectable for copy-paste on desktop. */}
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs">
+          <Link
+            href={mailto}
+            className="flex gap-1.5 items-center hover:underline text-primary"
+          >
+            <Mail className="size-4" /> {CONTACT.email}
+          </Link>
 
-        <Link
-          target="_blank"
-          href="https://linkedin.com/in/gauravahuja-iitmandi"
-          className="flex gap-1 items-center hover:underline"
-        >
-          <FaLinkedin className="size-4" /> LinkedIn
-        </Link>
+          <Link
+            href={tel}
+            className="flex gap-1.5 items-center hover:underline text-primary"
+          >
+            <Phone className="size-4" /> {CONTACT.phone}
+          </Link>
+
+          <Link
+            target="_blank"
+            href={CONTACT.github}
+            className="flex gap-1.5 items-center hover:underline"
+          >
+            <FaGithub className="size-4" /> GitHub
+          </Link>
+
+          <Link
+            target="_blank"
+            href={CONTACT.linkedin}
+            className="flex gap-1.5 items-center hover:underline"
+          >
+            <FaLinkedin className="size-4" /> LinkedIn
+          </Link>
+        </div>
       </div>
     </div>
   );

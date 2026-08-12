@@ -1,5 +1,7 @@
 import { useState, useRef } from 'react';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
+import { Mail, Phone } from 'lucide-react';
+import { CONTACT, mailto, tel } from '@/lib/contact';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -90,6 +92,17 @@ export default function ContactForm({
 
   return (
     <form onSubmit={onSubmit} className="space-y-4">
+      {/* Some people would rather email or call than fill in a form. */}
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
+        <span>Or reach me directly:</span>
+        <a href={mailto} className="flex items-center gap-1.5 text-primary hover:underline">
+          <Mail className="size-3.5" /> {CONTACT.email}
+        </a>
+        <a href={tel} className="flex items-center gap-1.5 text-primary hover:underline">
+          <Phone className="size-3.5" /> {CONTACT.phone}
+        </a>
+      </div>
+
       {showName && (
         <div className="space-y-2">
           <Label htmlFor="name">Name (Optional)</Label>

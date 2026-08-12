@@ -4,6 +4,7 @@ import type { AppType } from "@/store/useStore";
 import type { ThemeId } from "@/lib/themes";
 import { FILE_TREE } from "@/lib/file-tree";
 import { THEME_LIST, isThemeId } from "@/lib/themes";
+import { CONTACT, mailto, tel } from "@/lib/contact";
 
 // Sentinels the input handler acts on rather than printing.
 export const CLEAR = "CLEAR";
@@ -196,10 +197,28 @@ export const COMMANDS: Record<string, Command> = {
   },
 
   contact: {
-    description: "send me a message",
+    description: "how to reach me",
     run: (_args, ctx) => {
       ctx.setContactOpen(true);
-      return "opening the message box...";
+      return (
+        <div className="space-y-1">
+          <div>
+            <span className="text-secondary">email </span>
+            <a href={mailto} className="text-primary hover:underline">
+              {CONTACT.email}
+            </a>
+          </div>
+          <div>
+            <span className="text-secondary">phone </span>
+            <a href={tel} className="text-primary hover:underline">
+              {CONTACT.phone}
+            </a>
+          </div>
+          <div className="text-muted-foreground">
+            opening the message box too...
+          </div>
+        </div>
+      );
     },
   },
 
