@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
-import { CircleUser } from "lucide-react";
+import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -164,11 +164,16 @@ export function FirstScreen() {
 
       {/* Without this the first thing a visitor sees is an anonymous clock —
           no clue whose site it is or whether they're in the right place. */}
-      <div className="flex flex-col items-center gap-1 mt-12 text-center">
-        <p className="text-3xl sm:text-4xl font-semibold">Gaurav Ahuja</p>
-        <p className="text-sm sm:text-base text-white/80">
-          backend engineer · IIT Mandi CSE
-        </p>
+      <div className="flex flex-col items-center gap-4 mt-14 text-center">
+        <Image
+          src="/images/gaurav.jpg"
+          alt="Gaurav Ahuja"
+          width={128}
+          height={128}
+          priority
+          className="size-24 sm:size-32 rounded-full object-cover ring-2 ring-white/40 shadow-xl"
+        />
+        <p className="text-2xl sm:text-3xl font-semibold">Gaurav Ahuja</p>
       </div>
 
       <p className="text-lg italic text-white/70 absolute bottom-10 text-center">
@@ -204,7 +209,13 @@ export function PasswordScreen({ onLogin }: { onLogin?: () => void }) {
   return (
     <div className="h-full w-full flex items-center justify-center text-white relative">
       <div className="flex flex-col items-center space-y-4">
-        <CircleUser className="size-24 opacity-90" />
+        <Image
+          src="/images/gaurav.jpg"
+          alt="Gaurav Ahuja"
+          width={96}
+          height={96}
+          className="size-24 rounded-full object-cover ring-2 ring-white/40"
+        />
         <span className="text-2xl font-semibold">gaurav</span>
         <Input
           type="password"
